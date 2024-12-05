@@ -40,6 +40,8 @@ model OrganizationMember {
   organizationId String           @db.Uuid
   organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   role           OrganizationRole
+  joinedAt       DateTime?
+  invitedAt      DateTime         @default(now())
 
   @@id([userId, organizationId])
   @@map("organization_member")
