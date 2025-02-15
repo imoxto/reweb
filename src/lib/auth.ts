@@ -1,15 +1,28 @@
 import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { admin } from "better-auth/plugins"
 import { headers } from "next/headers";
-import prisma from "./db";
+import { db } from "./db";
+import { BASE_URL } from "./constants";
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
-    provider: "postgresql",
+  database: drizzleAdapter(db, {
+    provider: "pg",
   }),
+  plugins: [
+    admin()
+  ],
   // emailAndPassword: {
   //   enabled: true,
   // },
+  secret: process.env.AUTH_SECRET!,
+  baseURL: BASE_URL,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 15 * 60, // Cache duration in seconds
+    },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -17,9 +30,9 @@ export const auth = betterAuth({
     },
   },
 });
- 
+
 export async function getSession() {
   return await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
 }

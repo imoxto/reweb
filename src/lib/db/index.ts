@@ -1,7 +1,10 @@
-import { PrismaClient } from "@prisma/client";
- 
-const prisma = new PrismaClient({
-  log: ["query", "info"],
-});
+// For Node.js - make sure to install the 'ws' and 'bufferutil' packages
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import * as schema from './schema';
+import ws from 'ws';
 
-export default prisma;
+export const db = drizzle({
+  connection: process.env.DATABASE_URL!,
+  ws: ws,
+  schema
+});
