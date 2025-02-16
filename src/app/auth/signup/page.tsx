@@ -8,8 +8,15 @@ import {
 import Link from "next/link";
 import GoogleOAuthButton from "../_components/oauth-buttons";
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  const sessionResponse = await getSession();
+  if (sessionResponse?.user) {
+    redirect("/dashboard");
+  }
+  
   return (
     <Card>
       <CardHeader>

@@ -35,7 +35,7 @@ export function UserAvatar() {
 
   return (
     <Avatar className="h-8 w-8 rounded-lg">
-      <AvatarImage src={data?.user?.image ?? ""} alt={`${data?.user?.name??"Unknown user's image"}`} />
+      <AvatarImage src={data?.user?.image ?? ""} alt={`${data?.user?.name??"Unknown user"} avatar`} />
       <AvatarFallback className="rounded-lg">
         <User className="h-4 w-4" />
       </AvatarFallback>
@@ -116,7 +116,7 @@ export function NavUser() {
               onClick={async () => {
                 const res = await authClient.signOut();
                 if (res.data?.success) {
-                  router.push("/login");
+                  router.refresh();
                 }
               }}
             >
