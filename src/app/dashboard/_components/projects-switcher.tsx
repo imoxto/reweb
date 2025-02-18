@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import * as React from "react";
+import { ChevronsUpDown, Folder, Plus } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -11,27 +11,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 
 export function ProjectsSwitcher({
   projects = [],
 }: {
   projects?: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
+    name: string;
+    plan: string;
+  }[];
 }) {
-  const { isMobile } = useSidebar()
-  const [activeProject, setActiveProject] = React.useState(projects[0])
-  const router = useRouter()
+  const { isMobile } = useSidebar();
+  const [activeProject, setActiveProject] = React.useState(projects[0]);
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -42,15 +41,23 @@ export function ProjectsSwitcher({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              {activeProject? <><div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeProject.logo className="size-4" />
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {activeProject.name}
-                </span>
-                <span className="truncate text-xs">{activeProject.plan}</span>
-              </div></>: "No projects selected"}
+              {activeProject ? (
+                <>
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    <Folder className="size-4 shrink-0" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">
+                      {activeProject.name}
+                    </span>
+                    <span className="truncate text-xs">
+                      {activeProject.plan}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                "No projects selected"
+              )}
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -70,22 +77,27 @@ export function ProjectsSwitcher({
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <project.logo className="size-4 shrink-0" />
+                  <Folder className="size-4 shrink-0" />
                 </div>
                 {project.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2" onClick={() => router.push("/dashboard/projects/new")}>
+            <DropdownMenuItem
+              className="gap-2 p-2"
+              onClick={() => router.push("/dashboard/projects/new")}
+            >
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add project</div>
+              <div className="font-medium text-muted-foreground">
+                Add project
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

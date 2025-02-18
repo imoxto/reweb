@@ -1,3 +1,4 @@
+"use server";
 import { getSession } from "@/lib/auth";
 import { createProject } from "@/lib/db/model";
 import { createProjectSchema } from "@/lib/zod/project";
