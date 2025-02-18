@@ -4,8 +4,10 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarHeader,
+  SidebarContent,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
+import { ProjectsSwitcher } from "./projects-switcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -13,13 +15,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarTrigger />
       </SidebarHeader>
-      {/* <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
-      </SidebarContent> */}
+        <ProjectsSwitcher />
+      </SidebarContent>
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>
