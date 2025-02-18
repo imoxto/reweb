@@ -36,7 +36,7 @@ export function CreateProjectForm({
     slug: "",
   },
 }: {
-  values?: z.infer<typeof createProjectSchema>;
+  values?: CreateProjectSchema;
 }) {
   const router = useRouter();
   const form = useForm<CreateProjectSchema>({
