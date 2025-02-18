@@ -15,8 +15,8 @@ export const project = pgTable("project", {
   name: text("name").notNull(),
   description: text("description"),
   slug: text("slug").notNull(),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export type SelectProject = typeof project.$inferSelect;
@@ -28,11 +28,11 @@ export const userProject = pgTable(
     projectId: uuid("project_id").references(() => project.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
-    }),
-    userId: uuid("user_id").references(() => user.id, {
+    }).notNull(),
+    userId: text("user_id").references(() => user.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
-    }),
+    }).notNull(),
     role: text("role")
       .$type<"owner" | "admin" | "member" | "viewer">()
       .notNull(),

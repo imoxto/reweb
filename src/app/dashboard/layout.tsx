@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "./_components/app-sidebar"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -10,9 +10,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main>
+      <SidebarInset>
         {children}
-      </main>
+      </SidebarInset>
     </SidebarProvider>
   )
 }
