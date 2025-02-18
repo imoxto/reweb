@@ -26,6 +26,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CreateProjectSchema, createProjectSchema } from "@/lib/zod/project";
+import { createProjectAction } from "@/lib/server/actions";
+import { toast } from "@/hooks/use-toast";
 
 
 
@@ -48,9 +50,19 @@ export function CreateProjectForm({
     },
   });
 
-  function onSubmit(values: CreateProjectSchema) {
-    console.log(values);
-    router.push("/dashboard/projects");
+  async function onSubmit(values: CreateProjectSchema) {
+    try {
+      const res = await createProjectAction(values);
+      console.log(res);
+      router.push(`/dashboard/projects/${res.slug}`);
+    } catch (error: any) {
+      console.error("Failed to create project:", error);
+      toast({
+        title: "Failed to create project",
+        description: error.message ?? "An unknown error occurred",
+        variant: "destructive",
+      });
+    }
   }
 
   return (

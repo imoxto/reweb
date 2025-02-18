@@ -16,7 +16,7 @@ export async function createProject(params: {
         id: uuid,
         slug: params.projectInput.slug ?? uuid,
       })
-      .returning({ id: project.id });
+      .returning({ id: project.id, slug: project.slug });
     await tx.insert(userProject).values({
       projectId: result[0].id,
       userId: params.userId,
