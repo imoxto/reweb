@@ -7,7 +7,7 @@ import {
   SidebarContent,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
-import { ProjectsSwitcher } from "./projects-switcher";
+import { ProjectsSwitcherWrapper } from "./projects-switcher-wrapper";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -16,7 +16,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarTrigger />
       </SidebarHeader>
       <SidebarContent>
-        <ProjectsSwitcher />
+        <ProjectsSwitcherWrapper />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
