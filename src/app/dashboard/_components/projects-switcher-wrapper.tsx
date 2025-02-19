@@ -1,16 +1,16 @@
 import { getSession } from "@/lib/auth";
-import { getUserProjects } from "@/lib/db/model";
 import { ProjectsSwitcher } from "./projects-switcher";
+import { getCachedUserProjects } from "@/lib/server/cached/projects";
 
 export async function ProjectsSwitcherWrapper() {
   const session = await getSession();
   if (!session?.user) return null;
 
-  const userProjects = await getUserProjects({ userId: session.user.id });
+  const userProjects = await getCachedUserProjects({ userId: session.user.id });
   
-  const projects = userProjects.map(({ project }) => ({
+  const projects = userProjects.map(({ project, project_user }) => ({
     name: project.name,
-    plan: "Free", // You can modify this based on your plan implementation
+    role: project_user.role,
     slug: project.slug,
   }));
 

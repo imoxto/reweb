@@ -25,7 +25,7 @@ export function ProjectsSwitcher({
 }: {
   projects?: {
     name: string;
-    plan: string;
+    role: string;
   }[];
 }) {
   const { isMobile } = useSidebar();
@@ -51,7 +51,7 @@ export function ProjectsSwitcher({
                       {activeProject.name}
                     </span>
                     <span className="truncate text-xs">
-                      {activeProject.plan}
+                      {activeProject.role}
                     </span>
                   </div>
                 </>

@@ -2,6 +2,8 @@
 import { getSession } from "@/lib/auth";
 import { createProject } from "@/lib/db/model";
 import { createProjectSchema } from "@/lib/zod/project";
+import { revalidateTag } from "next/cache";
+import { getUserProjectsTag } from "../cached/projects";
 
 export async function createProjectAction(values: any) {
   const token = await getSession();
@@ -19,6 +21,8 @@ export async function createProjectAction(values: any) {
       slug,
     }
   })
+
+  revalidateTag(getUserProjectsTag({ userId: token.user.id }))
 
   return project
 }

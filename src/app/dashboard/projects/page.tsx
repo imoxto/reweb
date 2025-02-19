@@ -1,10 +1,10 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { getUserProjects } from "@/lib/db/model";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { getCachedUserProjects } from "@/lib/server/cached/projects";
 
 export default async function ProjectsPage() {
   const session = await getSession();
@@ -12,7 +12,7 @@ export default async function ProjectsPage() {
     redirect("/auth/signin");
   }
 
-  const projects = await getUserProjects({ userId: session.user.id });
+  const projects = await getCachedUserProjects({ userId: session.user.id });
 
   return (
     <main className="container py-8">
