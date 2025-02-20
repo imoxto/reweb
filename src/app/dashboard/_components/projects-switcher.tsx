@@ -18,7 +18,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export function ProjectsSwitcher({
   projects = [],
@@ -26,11 +26,14 @@ export function ProjectsSwitcher({
   projects?: {
     name: string;
     role: string;
+    slug: string;
   }[];
 }) {
   const { isMobile } = useSidebar();
-  const [activeProject, setActiveProject] = React.useState(projects[0]);
   const router = useRouter();
+  const params = useParams();
+  const projectSlug = params.projectSlug;
+  const activeProject = projects.find(p=>p.slug===projectSlug)
 
   return (
     <SidebarMenu>
@@ -73,7 +76,7 @@ export function ProjectsSwitcher({
             {projects.map((project, index) => (
               <DropdownMenuItem
                 key={project.name}
-                onClick={() => setActiveProject(project)}
+                onClick={() => router.push(`/dashboard/projects/${project.slug}`)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">

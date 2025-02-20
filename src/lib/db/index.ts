@@ -6,5 +6,6 @@ import ws from 'ws';
 export const db = drizzle({
   connection: process.env.DATABASE_URL!,
   ws: ws,
-  schema
+  schema,
+  logger: true
 });

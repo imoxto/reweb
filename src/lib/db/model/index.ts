@@ -28,19 +28,20 @@ export async function createProject(params: {
 }
 
 export async function getUserProject({
-  projectId,
+  projectSlug,
   userId,
 }: {
-  projectId: string;
+  projectSlug: string;
   userId: string;
 }) {
-  const retrievedProject = await db
+  const [retrievedProject] =await db
     .select()
-    .from(userProject)
-    .innerJoin(project, eq(project.id, userProject.projectId))
+    .from(project)
+    .innerJoin(userProject, eq(project.id, userProject.projectId))
     .where(
-      and(eq(userProject.projectId, projectId), eq(userProject.userId, userId))
-    );
+      and(eq(project.slug, projectSlug), eq(userProject.userId, userId))
+    ).limit(1)
+
   return retrievedProject;
 }
 
