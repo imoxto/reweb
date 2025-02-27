@@ -3,7 +3,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,24 +25,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CreateProjectSchema, createProjectSchema } from "@/lib/zod/project";
-import { createProjectAction } from "@/lib/server/actions";
+import { UpdateProjectSchema, updateProjectSchema } from "@/lib/zod/project";
+import { updateProjectAction } from "@/lib/server/actions";
 import { toast } from "@/hooks/use-toast";
 
 
-
-export function CreateProjectForm({
+export function UpdateProjectForm({
   values = {
     name: "",
     description: "",
     slug: "",
   },
 }: {
-  values?: CreateProjectSchema;
+  values?: UpdateProjectSchema;
 }) {
+  const params = useParams<{ projectSlug: string }>();
   const router = useRouter();
-  const form = useForm<CreateProjectSchema>({
-    resolver: zodResolver(createProjectSchema),
+  const form = useForm<UpdateProjectSchema>({
+    resolver: zodResolver(updateProjectSchema),
     defaultValues: {
       name: values.name,
       description: values.description,
@@ -50,15 +50,15 @@ export function CreateProjectForm({
     },
   });
 
-  async function onSubmit(values: CreateProjectSchema) {
+  async function onSubmit(values: UpdateProjectSchema) {
     try {
-      const res = await createProjectAction(values);
+      const res = await updateProjectAction(params.projectSlug, values);
       console.log(res);
       router.push(`/dashboard/projects/${res.slug}`);
     } catch (error: any) {
-      console.error("Failed to create project:", error);
+      console.error("Failed to update project:", error);
       toast({
-        title: "Failed to create project",
+        title: "Failed to update project",
         description: error.message ?? "An unknown error occurred",
         variant: "destructive",
       });
@@ -70,9 +70,9 @@ export function CreateProjectForm({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>Create New Project</CardTitle>
+            <CardTitle>Update Project</CardTitle>
             <CardDescription>
-              Create a new project to get started
+              Update your project details
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -130,7 +130,7 @@ export function CreateProjectForm({
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit">Create Project</Button>
+            <Button type="submit">Update Project</Button>
           </CardFooter>
         </Card>
       </form>

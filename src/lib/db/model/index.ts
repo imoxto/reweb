@@ -27,6 +27,29 @@ export async function createProject(params: {
   return insertedProject;
 }
 
+export async function deleteProject({ projectId }: { projectId: string }) {
+  const res = await db.delete(project).where(eq(project.id, projectId));
+  return res.rowCount;
+}
+
+export async function updateProject({
+  projectId,
+  projectInput,
+}: {
+  projectId: string;
+  projectInput: Partial<InsertProject>;
+}) {
+  const res = await db
+    .update(project)
+    .set(projectInput)
+    .where(eq(project.id, projectId))
+    .returning({
+      id: project.id,
+      slug: project.slug,
+    });
+  return res[0];
+}
+
 export async function getUserProject({
   projectSlug,
   userId,
@@ -34,13 +57,12 @@ export async function getUserProject({
   projectSlug: string;
   userId: string;
 }) {
-  const [retrievedProject] =await db
+  const [retrievedProject] = await db
     .select()
     .from(project)
     .innerJoin(userProject, eq(project.id, userProject.projectId))
-    .where(
-      and(eq(project.slug, projectSlug), eq(userProject.userId, userId))
-    ).limit(1)
+    .where(and(eq(project.slug, projectSlug), eq(userProject.userId, userId)))
+    .limit(1);
 
   return retrievedProject;
 }
