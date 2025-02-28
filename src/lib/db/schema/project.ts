@@ -7,6 +7,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { v4 as uuidv4 } from "uuid";
 import { user } from "./auth";
+import { ProjectRole } from "@/lib/constants/permissions";
 
 export const project = pgTable("project", {
   id: uuid("id")
@@ -34,7 +35,7 @@ export const userProject = pgTable(
       onUpdate: "cascade",
     }).notNull(),
     role: text("role")
-      .$type<"owner" | "admin" | "member" | "viewer">()
+      .$type<ProjectRole>()
       .notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
