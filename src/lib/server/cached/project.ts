@@ -1,27 +1,14 @@
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import { getUserProject, getUserProjects } from "@/lib/db/model/project";
-import { GLOBAL_TAG } from "./helper";
+import { GLOBAL_TAG, PROJECTS_TAG, projectSlugTag, userTag } from "./helper";
 
-export function getUserProjectsTag({ userId }: { userId: string }) {
-  return [`user-${userId}-projects`, GLOBAL_TAG];
-}
 
 export async function getCachedUserProjects({ userId }: { userId: string }) {
   "use cache";
-  cacheTag(...getUserProjectsTag({ userId }));
+  cacheTag(userTag(userId), PROJECTS_TAG, GLOBAL_TAG);
 
   const projects = await getUserProjects({ userId });
   return projects;
-}
-
-export function getUserProjectTag({
-  projectSlug,
-  userId,
-}: {
-  projectSlug: string;
-  userId: string;
-}) {
-  return [`user-${userId}`, `project-${projectSlug}`, GLOBAL_TAG];
 }
 
 export async function getCachedUserProject({
@@ -32,7 +19,7 @@ export async function getCachedUserProject({
   userId: string;
 }) {
   "use cache";
-  cacheTag(...getUserProjectTag({ projectSlug, userId }));
+  cacheTag(userTag(userId), projectSlugTag(projectSlug), GLOBAL_TAG);
   const project = await getUserProject({ projectSlug, userId });
   return project;
 }

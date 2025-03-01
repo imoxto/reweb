@@ -1,13 +1,13 @@
 "use server";
 import { getSession } from "@/lib/auth";
-import { createProject, deleteProject, updateProject } from "@/lib/db/model/project";
-import { createProjectSchema, updateProjectSchema } from "@/lib/zod/project";
 import {
-  getCachedUserProject,
-  getUserProjectsTag,
-  getUserProjectTag,
-} from "../cached/project";
-import { revalidateTags } from "../cached/helper";
+  createProject,
+  deleteProject,
+  updateProject,
+} from "@/lib/db/model/project";
+import { createProjectSchema, updateProjectSchema } from "@/lib/zod/project";
+import { getCachedUserProject } from "../cached/project";
+import { projectSlugTag, projectTag, revalidateTags } from "../cached/helper";
 
 export async function createProjectAction(values: any) {
   const token = await getSession();
@@ -26,10 +26,7 @@ export async function createProjectAction(values: any) {
     },
   });
 
-  revalidateTags(getUserProjectsTag({ userId: token.user.id }));
-  revalidateTags(
-    getUserProjectTag({ userId: token.user.id, projectSlug: project.slug })
-  );
+  revalidateTags([projectTag(project.id), projectSlugTag(project.slug)]);
 
   return project;
 }
@@ -54,14 +51,12 @@ export async function updateProjectAction(currentSlug: string, values: any) {
     projectInput: { name, description, slug },
   });
 
-  revalidateTags(getUserProjectsTag({ userId: token.user.id }));
-  revalidateTags(
-    getUserProjectTag({ userId: token.user.id, projectSlug: currentSlug })
-  );
-  if (slug && slug !== currentSlug)
-    revalidateTags(
-      getUserProjectTag({ userId: token.user.id, projectSlug: slug })
-    );
+  revalidateTags([
+    projectTag(project.id),
+    ...(project.slug === currentSlug
+      ? [projectSlugTag(project.slug)]
+      : [projectSlugTag(currentSlug), projectSlugTag(project.slug)]),
+  ]);
 
   return project;
 }
@@ -81,6 +76,5 @@ export async function deleteProjectAction(projectSlug: string) {
 
   await deleteProject({ projectId: userProject.project.id });
 
-  revalidateTags(getUserProjectsTag({ userId: token.user.id }));
-  revalidateTags(getUserProjectTag({ userId: token.user.id, projectSlug }));
+  revalidateTags([projectTag(userProject.project.id), projectSlugTag(projectSlug)]);
 }
