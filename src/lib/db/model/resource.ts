@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNotNull } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "..";
 import { resource } from "../schema";
@@ -21,21 +21,32 @@ export async function createResource({
   return createdResource;
 }
 
-export async function getResource({
-  id,
-}: {
-  id: string;
-}) {
-  const retrievedResource = await db.select().from(resource).where(eq(resource.id, id));
+export async function getResource({ id }: { id: string }) {
+  const retrievedResource = await db
+    .select()
+    .from(resource)
+    .where(eq(resource.id, id));
   return retrievedResource;
 }
 
 export async function getResources({
   projectId,
+  publishedOnly = false,
 }: {
   projectId: string;
+  publishedOnly?: boolean;
 }) {
-  const retrievedResources = await db.select().from(resource).where(eq(resource.projectId, projectId));
+  const retrievedResources = await db
+    .select()
+    .from(resource)
+    .where(
+      publishedOnly
+        ? and(
+            eq(resource.projectId, projectId),
+            isNotNull(resource.publishedAt)
+          )
+        : eq(resource.projectId, projectId)
+    );
   return retrievedResources;
 }
 
@@ -50,6 +61,14 @@ export async function updateResource({
   type: string;
   publishedAt: Date;
 }) {
-  const updatedResource = await db.update(resource).set({ name, type, publishedAt }).where(eq(resource.id, id));
+  const updatedResource = await db
+    .update(resource)
+    .set({ name, type, publishedAt })
+    .where(eq(resource.id, id));
   return updatedResource;
+}
+
+export async function deleteResource({ id }: { id: string }) {
+  const deletedResource = await db.delete(resource).where(eq(resource.id, id));
+  return deletedResource;
 }
