@@ -1,12 +1,12 @@
 "use server";
 import { getSession } from "@/lib/auth";
-import { createProject, deleteProject, updateProject } from "@/lib/db/model";
+import { createProject, deleteProject, updateProject } from "@/lib/db/model/project";
 import { createProjectSchema, updateProjectSchema } from "@/lib/zod/project";
 import {
   getCachedUserProject,
   getUserProjectsTag,
   getUserProjectTag,
-} from "../cached/projects";
+} from "../cached/project";
 import { revalidateTags } from "../cached/helper";
 
 export async function createProjectAction(values: any) {

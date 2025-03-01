@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { getCachedUserProjects } from "@/lib/server/cached/projects";
+import { getCachedUserProjects } from "@/lib/server/cached/project";
 
 export default async function ProjectsPage() {
   const session = await getSession();

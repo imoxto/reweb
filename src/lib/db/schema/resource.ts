@@ -11,9 +11,13 @@ export const resource = pgTable("resource", {
     onUpdate: "cascade",
   }).notNull(),
   publishedAt: timestamp("published_at"),
+  type: text("type").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export type SelectResource = typeof resource.$inferSelect;
+export type InsertResource = typeof resource.$inferInsert;
 
 export const embedding = pgTable(
   "embedding",
@@ -36,3 +40,7 @@ export const embedding = pgTable(
     ),
   ]
 );
+
+export type SelectEmbedding = typeof embedding.$inferSelect;
+export type InsertEmbedding = typeof embedding.$inferInsert;
+

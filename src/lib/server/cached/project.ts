@@ -1,5 +1,5 @@
 import { unstable_cacheTag as cacheTag } from "next/cache";
-import { getUserProject, getUserProjects } from "@/lib/db/model";
+import { getUserProject, getUserProjects } from "@/lib/db/model/project";
 import { GLOBAL_TAG } from "./helper";
 
 export function getUserProjectsTag({ userId }: { userId: string }) {

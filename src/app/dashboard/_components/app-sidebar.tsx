@@ -7,7 +7,7 @@ import {
   SidebarContent,
 } from "@/components/ui/sidebar";
 import { getSession } from "@/lib/auth";
-import { getCachedUserProjects } from "@/lib/server/cached/projects";
+import { getCachedUserProjects } from "@/lib/server/cached/project";
 import { NavUser } from "./nav-user";
 import { ProjectsSwitcher } from "./projects-switcher";
 import { Suspense } from "react";
@@ -34,9 +34,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarTrigger />
       </SidebarHeader>
       <SidebarContent className="p-2">
-        <Suspense fallback={<div>Loading...</div>}>
-          <ProjectsSwitcherWrapper />
-        </Suspense>
+        <ProjectsSwitcherWrapper />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, Folder, Plus } from "lucide-react";
+import { ChevronsUpDown, Notebook, Plus, Folder, Home, MessageSquareText } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -101,6 +101,19 @@ export function ProjectsSwitcher({
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      {activeProject && (
+        <SidebarMenuItem>
+          <SidebarMenuButton onClick={() => router.push(`/dashboard/projects/${activeProject.slug}`)}>
+            <Home className="size-4 shrink-0" /> {activeProject.name} home
+          </SidebarMenuButton>
+          <SidebarMenuButton onClick={() => router.push(`/dashboard/projects/${activeProject.slug}/resources`)}>
+            <Notebook className="size-4 shrink-0" /> Resources
+          </SidebarMenuButton>
+          <SidebarMenuButton onClick={() => router.push(`/dashboard/projects/${activeProject.slug}/chat`)}>
+            <MessageSquareText className="size-4 shrink-0" /> Chat
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      )}
     </SidebarMenu>
   );
 }

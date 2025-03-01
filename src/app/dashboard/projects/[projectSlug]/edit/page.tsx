@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { UpdateProjectForm } from "./update-project-form";
 import { getSession } from "@/lib/auth";
-import { getCachedUserProject } from "@/lib/server/cached/projects";
+import { getCachedUserProject } from "@/lib/server/cached/project";
 
 async function UpdateProjectFormWrapper({
   projectSlug,
@@ -32,9 +32,7 @@ export default async function NewProjectPage({
   const { projectSlug } = await params;
   return (
     <main className="flex h-full flex-col items-center justify-center">
-      <Suspense fallback={<div>Loading...</div>}>
         <UpdateProjectFormWrapper projectSlug={projectSlug} />
-      </Suspense>
     </main>
   );
 }

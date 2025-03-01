@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSession } from "@/lib/auth";
-import { getCachedUserProject } from "@/lib/server/cached/projects";
+import { getCachedUserProject } from "@/lib/server/cached/project";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -66,6 +66,12 @@ export default async function ProjectPage({
               </p>
             </div>
           </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Project Resources</CardTitle>
+          </CardHeader>
+          <CardContent>{}</CardContent>
         </Card>
       </div>
     </main>
