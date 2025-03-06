@@ -4,6 +4,10 @@ export const GLOBAL_TAG = "*";
 
 export const PROJECTS_TAG = "projects";
 
+export function projectResourcesTag(projectId: string) {
+  return `projectResources-${projectId}`;
+}
+
 export function projectTag(id: string) {
   return `project-${id}`;
 }
@@ -20,6 +24,10 @@ export function resourceTag(id: string) {
 export const THREADS_TAG = "threads";
 export function threadTag(id: string) {
   return `thread-${id}`;
+}
+
+export function userProjectsTag(userId: string) {
+  return `userProjects-${userId}`;
 }
 
 export function userTag(id: string) {

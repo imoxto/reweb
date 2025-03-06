@@ -7,7 +7,13 @@ import {
 } from "@/lib/db/model/project";
 import { createProjectSchema, updateProjectSchema } from "@/lib/zod/project";
 import { getCachedUserProject } from "../cached/project";
-import { projectSlugTag, projectTag, revalidateTags } from "../cached/helper";
+import {
+  projectResourcesTag,
+  projectSlugTag,
+  projectTag,
+  revalidateTags,
+  userProjectsTag,
+} from "../cached/helper";
 
 export async function createProjectAction(values: any) {
   const token = await getSession();
@@ -26,7 +32,12 @@ export async function createProjectAction(values: any) {
     },
   });
 
-  revalidateTags([projectTag(project.id), projectSlugTag(project.slug)]);
+  revalidateTags([
+    userProjectsTag(token.user.id),
+    projectTag(project.id),
+    projectResourcesTag(project.id),
+    projectSlugTag(project.slug),
+  ]);
 
   return project;
 }
@@ -53,6 +64,7 @@ export async function updateProjectAction(currentSlug: string, values: any) {
 
   revalidateTags([
     projectTag(project.id),
+    userProjectsTag(token.user.id),
     ...(project.slug === currentSlug
       ? [projectSlugTag(project.slug)]
       : [projectSlugTag(currentSlug), projectSlugTag(project.slug)]),
@@ -76,5 +88,10 @@ export async function deleteProjectAction(projectSlug: string) {
 
   await deleteProject({ projectId: userProject.project.id });
 
-  revalidateTags([projectTag(userProject.project.id), projectSlugTag(projectSlug)]);
+  revalidateTags([
+    userProjectsTag(token.user.id),
+    projectTag(userProject.project.id),
+    projectResourcesTag(userProject.project.id),
+    projectSlugTag(projectSlug),
+  ]);
 }

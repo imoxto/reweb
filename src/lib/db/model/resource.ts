@@ -1,25 +1,28 @@
 import { eq, and, isNotNull } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
 import { db } from "..";
-import { resource } from "../schema";
+import { resource, embedding, InsertResource, InsertEmbedding } from "../schema";
 
-export async function createResource({
-  projectId,
-  name,
-  type,
-}: {
-  projectId: string;
-  name: string;
-  type: string;
+export async function createResourceAndEmbeddings(params: {
+  generateEmbeddings: () => Promise<Array<Omit<InsertEmbedding, "resourceId">>>;
+  resource: InsertResource;
 }) {
-  const createdResource = await db.insert(resource).values({
-    id: uuidv4(),
-    projectId,
-    name,
-    type,
-  });
-  return createdResource;
+  const [insertedResource] = await db
+    .insert(resource)
+    .values(params.resource)
+    .onConflictDoNothing()
+    .returning();
+  if (!insertedResource) {
+    return;
+  }
+  const generatedEmbeddings = await params.generateEmbeddings();
+  await db.insert(embedding).values(
+    generatedEmbeddings.map((embedding) => ({
+      ...embedding,
+      resourceId: insertedResource.id,
+    }))
+  );
 }
+
 
 export async function getResource({ id }: { id: string }) {
   const retrievedResource = await db

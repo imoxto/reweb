@@ -1,7 +1,7 @@
 import { getResource, getResources } from "@/lib/db/model/resource";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import { getCachedUserProject } from "./project";
-import { GLOBAL_TAG, projectTag, RESOURCES_TAG, resourceTag } from "./helper";
+import { GLOBAL_TAG, projectResourcesTag, projectTag, RESOURCES_TAG, resourceTag } from "./helper";
 
 export async function getCachedResources({
   userId,
@@ -16,7 +16,7 @@ export async function getCachedResources({
     return null;
   }
 
-  cacheTag(projectTag(userProject.project.id), RESOURCES_TAG, GLOBAL_TAG);
+  cacheTag(projectResourcesTag(userProject.project.id), RESOURCES_TAG, GLOBAL_TAG);
   const cachedResources = await getResources({ projectId: userProject.project.id });
   return cachedResources;
 }
@@ -35,7 +35,7 @@ export async function getCachedResource({
   if (!userProject) {
     return null;
   }
-  cacheTag(resourceTag(id), projectTag(userProject.project.id), GLOBAL_TAG);
+  cacheTag(resourceTag(id), projectResourcesTag(userProject.project.id), GLOBAL_TAG);
   const cachedResource = await getResource({ id });
   return cachedResource;
 }

@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, Session, User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin } from "better-auth/plugins"
 import { headers } from "next/headers";
@@ -31,8 +31,9 @@ export const auth = betterAuth({
   },
 });
 
-export async function getSession() {
-  return await auth.api.getSession({
+export async function getSession<T extends boolean = false>() {
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
+  return session as T extends true ? NonNullable<typeof session> : typeof session;
 }

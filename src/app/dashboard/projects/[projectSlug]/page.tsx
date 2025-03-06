@@ -6,6 +6,7 @@ import { Pencil } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DeleteProjectDialog } from "./_components/delete-project-dialog";
+import { ProjectResourcesCard } from "./_components/project-resources-card";
 
 export default async function ProjectPage({
   params,
@@ -67,12 +68,7 @@ export default async function ProjectPage({
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Resources</CardTitle>
-          </CardHeader>
-          <CardContent>{}</CardContent>
-        </Card>
+        <ProjectResourcesCard projectSlug={projectResponse.project.slug} />
       </div>
     </main>
   );

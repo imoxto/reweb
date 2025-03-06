@@ -1,12 +1,11 @@
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import { getUserProject, getUserProjects } from "@/lib/db/model/project";
-import { GLOBAL_TAG, PROJECTS_TAG, projectSlugTag, userTag } from "./helper";
+import { GLOBAL_TAG, PROJECTS_TAG, projectSlugTag, userProjectsTag, userTag } from "./helper";
 
 
 export async function getCachedUserProjects({ userId }: { userId: string }) {
   "use cache";
-  cacheTag(userTag(userId), PROJECTS_TAG, GLOBAL_TAG);
-
+  cacheTag(userTag(userId), userProjectsTag(userId), PROJECTS_TAG, GLOBAL_TAG);
   const projects = await getUserProjects({ userId });
   return projects;
 }
